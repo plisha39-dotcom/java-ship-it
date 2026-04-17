@@ -23,14 +23,14 @@ public abstract class Parcel {
     }
 
     public int calculateDeliveryCost() {
-        int cost = weight * tarif();
+        int cost = weight * tariff();
         return cost;
         // вес посылки * базовая стоимость (2-стандартная посылка
                                         //  3-скоропортящаяся посылка
                                         //  4-хрупкая посылка)
     }
 
-    public abstract int tarif();
+    public abstract int tariff();
 
     public int getWeight() {
         return weight;

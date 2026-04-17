@@ -10,9 +10,16 @@ public class PerishableParcel extends Parcel {
         this.timeToLive = timeToLive;
     }
 
-    /* метод isExpired
-    вход currentDay - номер текущего дня
-    sendDay + timeToLive >= currentDay - возвращаем false(посылка не испортилась)
-    else - true(посылка испортилась)
-     */
+    @Override
+    public int tariff() {
+        return KOEF_FOR_PL;
+    }
+
+    public boolean isExpired(int currentDay) {
+        if ((getSendDay() + timeToLive) >= currentDay) {
+            return false;//посылка не испортилась
+        } else {
+            return true;//посылка испортилась
+        }
+    }
 }
