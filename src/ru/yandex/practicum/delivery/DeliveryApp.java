@@ -7,7 +7,10 @@ import java.util.Scanner;
 public class DeliveryApp {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static List<Parcel> allParcels = new ArrayList<>();
+    private static List<Trackable> trackables = new ArrayList<>();
+    private static final ParcelBox<StandardParcel> stdParcelBox = new ParcelBox<>(10);
+    private static final ParcelBox<FragileParcel> fragParcelBox = new ParcelBox<>(10);
+    private static final ParcelBox<PerishableParcel> plParcelBox = new ParcelBox<>(10);
 
     public static void main(String[] args) {
         boolean running = true;
@@ -45,7 +48,46 @@ public class DeliveryApp {
     // реализуйте методы ниже
 
     private static void addParcel() {
-        // Подсказка: спросите тип посылки и необходимые поля, создайте объект и добавьте в allParcels
+        System.out.println("Выберите тип посылки:");
+        System.out.println("1 - стандартная посылка");
+        System.out.println("2 - скоропортящаяся посылка");
+        System.out.println("3 - хрупкая посылка");
+        int typeParcel = scanner.nextInt();
+        scanner.nextLine();
+        if (typeParcel != 1 && typeParcel != 2 && typeParcel != 3) {
+            System.out.println("Неправильный ввод");
+            return;
+        }
+
+        System.out.println("Введите название посылки:");
+            String description = scanner.nextLine();
+        System.out.println("Введите вес посылки:");
+            int weight = scanner.nextInt();
+            scanner.nextLine();
+        System.out.println("Введите адрес доставки:");
+            String deliveryAddress = scanner.nextLine();
+        System.out.println("Введите день отправки");
+            int sendDay = scanner.nextInt();
+
+        switch (typeParcel) {
+            case 1:
+                StandardParcel standardParcel = new StandardParcel(weight, description, deliveryAddress,sendDay);
+                stdParcelBox.addParcel(standardParcel);
+                break;
+            case 2:
+                System.out.println("Введите срок годности:");
+                int timeToLive = scanner.nextInt();
+                PerishableParcel perishableParcel = new PerishableParcel(weight, description, deliveryAddress, sendDay, timeToLive);
+                plParcelBox.addParcel(perishableParcel);
+                break;
+            case 3:
+                FragileParcel fragileParcel = new FragileParcel(weight, description, deliveryAddress, sendDay);
+                if (fragParcelBox.addParcel(fragileParcel)) {
+                    trackables.add(fragileParcel);
+                }
+                    break;
+        }
+        scanner.nextLine();
     }
 
     private static void sendParcels() {
@@ -55,6 +97,5 @@ public class DeliveryApp {
     private static void calculateCosts() {
         // Посчитать общую стоимость всех доставок и вывести на экран
     }
-
 }
 
